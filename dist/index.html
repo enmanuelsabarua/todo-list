@@ -8,19 +8,54 @@
 </head>
 <body>
     <header>
-        <h1>Todo List</h1>
+        <h1><i class="fa-solid fa-list"></i> Todo List</h1>
     </header>
     <div class="container">
         <aside>
-            <a href="">Inbox</a>
-            <a href="">Today</a>
-            <a href="">This week</a>
+            <a class="menu-link active" href=""><i class="fa-solid fa-inbox"></i> Inbox</a>
+            <a class="menu-link" href=""><i class="fa-solid fa-calendar-week"></i> Today</a>
+            <a class="menu-link" href=""><i class="fa-regular fa-calendar-days"></i> This week</a>
+            <div class="projects">
+                <h3>Projects <a href=""><i class="fa-solid fa-plus"></i></a></h3>
+            </div>
         </aside>
         <main>
             <h2>Inbox</h2>
-            <a href="">+ Add task</a>
+            <div class="tasks"></div>
+
+            <a href="" id="add-task"><i class="fa-solid fa-plus"></i> Add task</a>
+
+            <form class="form hide">
+                <input type="text" id="task-name" placeholder="Task name" required>
+                <input type="text" id="description" placeholder="Description">
+                <div>
+                    <div class="date-priority">
+                        <div>
+                            <label for="due-date">Due Date:</label>
+                            <input type="date" id="due-date">
+                        </div>
+                        <div>
+                            <select name="priority" id="priority">
+                                <option value="0" selected>Priority</option>
+                                <option value="1">Priority 1</option>
+                                <option value="2">Priority 2</option>
+                                <option value="3">Priority 3</option>
+                                <option value="4">Priority 4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button type="button" class="cancel-btn">Cancel</button>
+                        <button type="submit" class="add-btn">Add Task</button>
+                    </div>
+                </div>
+            </form>
         </main>
     </div>
+    <footer>
+        <p>Copyright &copy; enmanuelsabarua <i class="fa-brands fa-github"></i></p>
+    </footer>
     <script src="./main.bundle.js"></script>
+    <script src="https://kit.fontawesome.com/09c4f58860.js" crossorigin="anonymous"></script>
 </body>
 </html>

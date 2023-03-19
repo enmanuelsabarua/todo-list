@@ -1,122 +1,195 @@
-import Inbox from "./modules/inbox";
-import Item from "./modules/item";
-import Project from "./modules/project";
+import HandleInbox from './modules/HandleInbox';
+import HandleProjects from './modules/HandleProjects';
 
 import './style.css';
 
-function HandleInbox() {
-    const inbox = new Inbox();
 
-    const createItem = (title, description, dueDate, priority, notes, checkList) => {
-        const item = new Item(title, description, dueDate, priority, notes, checkList);
-        inbox.addItem(item);
-    }
+//  inbox.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4);
+//  inbox.createItem(2, "Barrer", "Hacer la tarea", "04/01/2023", 4, "notas", false);
+//  inbox.getItems();
+//  inbox.changeCheckStatus(1);
 
-    const getItems = () => {
-        console.log(inbox.getItems());
-        return inbox.getItems();
-    }
-
-    const deleteItem = (id) => {
-        inbox.deleteItem(id);
-    }
-
-    const changeCheckStatus = (id) => {
-        const items = inbox.getItems();
-
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
-                items[i].changeCheck();
-            }
-        }
-    }
-
-    return { createItem, getItems, deleteItem, changeCheckStatus }
-}
-
-
+// const projects = HandleProjects();
+// projects.createProject("Programming");
+// projects.createProject("Goals");
+// projects.selectProject(0);
+// projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
+// projects.selectProject(1);
+// projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
+// projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
+// projects.getProjects();
 const inbox = HandleInbox();
-// inbox.createItem(1, "Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-// inbox.createItem(2, "Barrer", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-// inbox.getItems();
-// inbox.changeCheckStatus(1);
 
+function addTaskUIInbox() {
+    // createItem, getItems, deleteItem, changeCheckStatus
 
-function HandleProjects() {
-    const projects = [];
-    let selectedProjectId = 0;
+    const addTaskButton = document.querySelector('#add-task');
+    const form = document.querySelector('.form');
 
-    const createProject = (name) => {
-        const project = new Project(name)
-        Project.id++;
-        projects.push(project);
-    }
+    // Show form
+    addTaskButton.addEventListener('click', e => {
+        e.preventDefault();
 
-    const deleteProject = (id) => {
-        for (let i = 0; i < projects.length; i++) {
-            if (projects[i].id === id) {
-                projects.splice(i, 1);
-            }
-        }
-    }
+        form.classList.remove('hide');
+        addTaskButton.classList.add('hide');
+    });
+    
+    // Form buttons
+    const cancelBtn = document.querySelector('.cancel-btn');
+    const addBtn = document.querySelector('.add-btn');
 
-    const getProjects = () => {
-        console.log(projects);
-        return projects;
-    }
+    cancelBtn.addEventListener('click', e => {
+        e.preventDefault();
+        
+        form.classList.add('hide');
+        addBtn.classList.remove('disabled');
+        addTaskButton.classList.remove('hide');
+    });
 
-    const selectProject = (id) => {
-        selectedProjectId = id;
-    }
+    const name = document.querySelector('#task-name');
 
-    const createItem = (title, description, dueDate, priority, notes, checkList) => {
-        const item = new Item(title, description, dueDate, priority, notes, checkList);
-        Item.id++;
-        projects[selectedProjectId].addItem(item);
-    }
+    addBtn.disable = true;
+    addBtn.classList.add('disabled');    
 
-    const getItems = () => {
-        console.log(projects[selectedProjectId].getItems());
-        return projects[selectedProjectId].getItems();
-    }
+    name.addEventListener('input', e => {
+        addBtn.disable = false;
+        addBtn.classList.remove('disabled');
+        
+    });
 
-    const deleteItem = (id) => {
-        projects[selectedProjectId].deleteItem(id);
-    }
+    addBtn.addEventListener('click', e => {
+        e.preventDefault();        
 
-    const changeCheckStatus = (id) => {
-        const items = projects[selectedProjectId].getItems();
+        const description = document.querySelector('#description');
 
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
-                items[i].changeCheck();
-            }
-        }
-    }
+        const dueDate = document.querySelector('#due-date');
+        const priority = document.querySelector('#priority');
+        
+        inbox.createItem(name.value, description.value, dueDate.value, priority.value, false);
+        showTaskUIInbox();
+        deleteTaskInbox();
+        checkTask();
 
-    return { 
-        createProject, 
-        deleteProject, 
-        getProjects, 
-        selectProject, 
-        createItem,
-        getItems,
-        deleteItem,
-        changeCheckStatus,
-    }
+        form.classList.add('hide');
+        addTaskButton.classList.remove('hide');
+
+        name.value = '';
+        description.value = '';
+        dueDate.value = '';
+        priority.value = '0';
+    });
 }
 
-const projects = HandleProjects();
-projects.createProject("Programming");
-projects.createProject("Goals");
-projects.selectProject(0);
-projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-projects.selectProject(1);
-projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-projects.getProjects();
 
-export {
-    HandleInbox,
-    HandleProjects
-};
+function deleteTaskInbox() {
+    const deleteBtns = document.querySelectorAll('.delete');
+
+    
+    deleteBtns.forEach(btn => {
+        btn.addEventListener('click', eraseTask);
+    });
+
+}
+
+function eraseTask(e) {
+    const task = e.target.parentNode.parentNode.parentNode;
+    const id = +task.dataset.id;
+
+    console.log(task);
+
+    inbox.deleteItem(id);
+    task.remove();
+}
+
+function checkTask() {
+    const checkBoxes = document.querySelectorAll('.check');
+
+    checkBoxes.forEach(checkBox => {
+        checkBox.addEventListener('change', changeStatus);
+    });
+}
+
+function changeStatus(e) {
+    setTimeout(() => {
+        const task = e.target.parentNode.parentNode.parentNode;
+        const id = +task.dataset.id;
+        eraseTask(e);
+        inbox.changeCheckStatus(id);
+    }, 500)
+}
+
+
+
+function showTaskUIInbox() {
+    const items = inbox.getItems();
+    console.log(items);
+
+    const tasks = document.querySelector('.tasks');
+    let i = items.length === 0 ? 0 : items.length - 1;
+
+    for (; i < items.length; i++) {
+    
+        const taskDiv = document.createElement('div');
+        taskDiv.classList.add('task');
+        taskDiv.dataset.id = items[i].id;
+    
+        const inputDiv = document.createElement('div');
+    
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.name = 'check';
+        check.classList.add('check');
+    
+        inputDiv.appendChild(check);
+
+    
+        const taskInfo = document.createElement('div');
+        taskInfo.classList.add('task-info');
+    
+        const title = document.createElement('p');
+        title.classList.add('task-title');
+        title.textContent = items[i].title;
+        
+        const description = document.createElement('p');
+        description.classList.add('task-description');
+        description.textContent = items[i].description;
+        
+        const date = document.createElement('p');
+        date.classList.add('date');
+        date.textContent = items[i].dueDate;
+        
+        const priority = document.createElement('p');
+        priority.classList.add('priority');
+        if (items[i].priority !== '0') {
+            priority.textContent = `Priority ${items[i].priority}`;
+        }
+    
+        taskInfo.appendChild(title);
+        taskInfo.appendChild(description);
+        taskInfo.appendChild(date);
+        taskInfo.appendChild(priority);
+
+
+        const closeDiv = document.createElement('div');
+        closeDiv.classList.add('close');
+
+        const pIcon = document.createElement('p');
+        const icon = document.createElement('i');
+        icon.classList.add('fa-solid');
+        icon.classList.add('fa-xmark');
+        pIcon.classList.add('delete');
+        pIcon.appendChild(icon);
+
+        closeDiv.appendChild(pIcon);
+    
+        taskDiv.appendChild(inputDiv);
+        taskDiv.appendChild(taskInfo);
+        taskDiv.appendChild(closeDiv);
+    
+        tasks.appendChild(taskDiv);        
+    }
+
+}
+
+addTaskUIInbox();
+showTaskUIInbox();

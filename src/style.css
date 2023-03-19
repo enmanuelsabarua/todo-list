@@ -203,6 +203,26 @@ main a:hover {
     margin-bottom: .5rem;
 }
 
+.task-info p.task-priority1 {
+    color: #d1453b;
+    font-weight: 700;
+}
+
+.task-info p.task-priority2 {
+    color: #eb8909;
+    font-weight: 700;
+}
+
+.task-info p.task-priority3 {
+    color: #246fe0;
+    font-weight: 700;
+}
+
+.task-info p.task-priority4 {
+    color: #666;
+    font-weight: 700;
+}
+
 .task-info {
     flex: 1;
 }

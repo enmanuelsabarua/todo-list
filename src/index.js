@@ -44,16 +44,29 @@ function addTaskUIInbox() {
         form.classList.add('hide');
         addBtn.classList.remove('disabled');
         addTaskButton.classList.remove('hide');
+
+        name.value = '';
+        description.value = '';
+        dueDate.value = '';
+        priority.value = '0';
+
+        addBtn.disabled = true;
+        addBtn.classList.add('disabled'); 
     });
 
     const name = document.querySelector('#task-name');
 
-    addBtn.disable = true;
+    addBtn.disabled = true;
     addBtn.classList.add('disabled');    
 
     name.addEventListener('input', e => {
-        addBtn.disable = false;
-        addBtn.classList.remove('disabled');
+        if(name.value !== '') {
+            addBtn.disabled = false;
+            addBtn.classList.remove('disabled');
+        } else {
+            addBtn.disabled = true;
+            addBtn.classList.add('disabled');    
+        }
         
     });
 
@@ -77,6 +90,10 @@ function addTaskUIInbox() {
         description.value = '';
         dueDate.value = '';
         priority.value = '0';
+
+        addBtn.disabled = true;
+        addBtn.classList.add('disabled');    
+
     });
 }
 
@@ -111,9 +128,11 @@ function checkTask() {
 
 function changeStatus(e) {
     setTimeout(() => {
-        const task = e.target.parentNode.parentNode.parentNode;
+        const task = e.target.parentNode.parentNode;
         const id = +task.dataset.id;
-        eraseTask(e);
+
+        inbox.deleteItem(id);
+        task.remove();
         inbox.changeCheckStatus(id);
     }, 500)
 }
@@ -162,6 +181,24 @@ function showTaskUIInbox() {
         priority.classList.add('priority');
         if (items[i].priority !== '0') {
             priority.textContent = `Priority ${items[i].priority}`;
+        }
+
+        switch (items[i].priority) {
+            case '1':
+                priority.classList.add('task-priority1');
+                break;
+            case '2':
+                priority.classList.add('task-priority2');
+                break;
+            case '3':
+                priority.classList.add('task-priority3');
+                break;
+            case '4':
+                priority.classList.add('task-priority4');
+                break;
+        
+            default:
+                break;
         }
     
         taskInfo.appendChild(title);

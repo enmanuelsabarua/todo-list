@@ -42,7 +42,6 @@ function addTaskUIInbox() {
         e.preventDefault();
         
         form.classList.add('hide');
-        addBtn.classList.remove('disabled');
         addTaskButton.classList.remove('hide');
 
         name.value = '';

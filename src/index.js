@@ -14,15 +14,18 @@ function HandleProjectUI() {
         e.preventDefault();
 
         projectForm.classList.add('pop-up');
-        
+
+        e.stopPropagation();        
     });
 
     // Form buttons
     const cancelBtn = document.querySelector('.cancel-project-btn');
-    const addBtn = document.querySelector('.add-project-btn');
+    const addBtn = document.querySelector('.add-project-btn');    
 
     cancelBtn.addEventListener('click', e => {
         projectForm.classList.remove('pop-up');
+
+        e.stopPropagation();        
     });
 
     const name = document.querySelector('#project-name');
@@ -52,7 +55,7 @@ function HandleProjectUI() {
         showProjectUI();
         HandleChangeProject();
         deleteProject();
-        showTaskUI(lastProject[0], lastProject[0].name);
+        showTaskUI(project, lastProject[0].name);
         
 
         // Remove the selected-project class from the other projects
@@ -75,6 +78,10 @@ function HandleProjectUI() {
 
         projectForm.classList.remove('pop-up');
         name.value = '';
+
+        e.stopPropagation();   
+
+          
     });
 
 }
@@ -89,7 +96,6 @@ function deleteProject() {
 
             showTaskUI(inbox, 'Inbox');
             project.selectProject(0);
-            console.log("Selected id", selectedProjectId);
 
             project.deleteProject(id);
             projectDiv.remove();
@@ -143,24 +149,32 @@ function HandleChangeProject() {
             projectTab.classList.add('selected-project');
             const id = +projectTab.dataset.id;
             project.selectProject(id);
-            console.log(selectedProjectId);
 
             const projectsArr = project.getProjects();
             
             for (let i = 0; i < projectsArr.length; i++) {
                 if (projectsArr[i].id === selectedProjectId) {
-                    showTaskUI(projectsArr[i], projectsArr[i].name);
+                    showTaskUI(project, projectsArr[i].name);
+                    // HandleTaskUI(project, projectsArr[i].name);
                 }
             }
+
         });
         
     });
 }
 
-function changeTab(project, name) {
-}
 
 HandleProjectUI();
+HandleTaskUI(project);
 
-HandleTaskUI(inbox);
-showTaskUI(inbox, 'Inbox');
+// HandleTaskUI(inbox, 'Inbox');
+// showTaskUI(inbox, 'Inbox');
+
+// const inboxBtn = document.querySelector('#inbox');
+// inboxBtn.addEventListener('click', e => {
+//     e.preventDefault();
+
+//     HandleTaskUI(inbox, 'Inbox');
+//     showTaskUI(inbox, 'Inbox');
+// });

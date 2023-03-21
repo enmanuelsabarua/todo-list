@@ -14,6 +14,10 @@ export default function HandleInbox() {
         return inbox.getItems();
     }
 
+    const getName = () => {
+        return 'Inbox';
+    }
+
     const deleteItem = (id) => {
         inbox.deleteItem(id);
     }
@@ -28,5 +32,5 @@ export default function HandleInbox() {
         }
     }
 
-    return { createItem, getItems, deleteItem, changeCheckStatus }
+    return { createItem, getItems, getName, deleteItem, changeCheckStatus }
 }

@@ -1,5 +1,9 @@
+
 function HandleTaskUI(instance) {
     // createItem, getItems, deleteItem, changeCheckStatus
+
+    // FIX CHANGE TAB from projects to inbox
+    
 
     const addTaskButton = document.querySelector('#add-task');
     const form = document.querySelector('.form');
@@ -10,11 +14,15 @@ function HandleTaskUI(instance) {
 
         form.classList.remove('hide');
         addTaskButton.classList.add('hide');
+
+        e.stopPropagation();
     });
     
     // Form buttons
     const cancelBtn = document.querySelector('.cancel-btn');
     const addBtn = document.querySelector('.add-btn');
+
+    // addBtn.replaceWith(addBtn.cloneNode(true));   
 
     cancelBtn.addEventListener('click', e => {
         e.preventDefault();
@@ -24,6 +32,8 @@ function HandleTaskUI(instance) {
 
         addBtn.disabled = true;
         addBtn.classList.add('disabled'); 
+
+        e.stopPropagation();
     });
 
     const name = document.querySelector('#task-name');
@@ -49,9 +59,10 @@ function HandleTaskUI(instance) {
 
         const dueDate = document.querySelector('#due-date');
         const priority = document.querySelector('#priority');
+
         
         instance.createItem(name.value, description.value, dueDate.value, priority.value, false);
-        showTaskUI(instance);
+        showTaskUI(instance, instance.getName());
         deleteTask(instance);
         checkTask(instance);
 
@@ -66,16 +77,19 @@ function HandleTaskUI(instance) {
         addBtn.disabled = true;
         addBtn.classList.add('disabled');    
 
+        e.stopPropagation();
     });
 }
 
 
 function deleteTask(instance) {
     const deleteBtns = document.querySelectorAll('.delete');
-
     
     deleteBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => { eraseTask(e, instance)} );
+        btn.addEventListener('click', (e) => { 
+            eraseTask(e, instance); 
+            e.stopPropagation();
+        });
     });
 
 }
@@ -83,8 +97,6 @@ function deleteTask(instance) {
 function eraseTask(e, instance) {
     const task = e.target.parentNode.parentNode.parentNode;
     const id = +task.dataset.id;
-
-    console.log(task);
 
     instance.deleteItem(id);
     task.remove();
@@ -94,7 +106,10 @@ function checkTask(instance) {
     const checkBoxes = document.querySelectorAll('.check');
 
     checkBoxes.forEach(checkBox => {
-        checkBox.addEventListener('change', (e) => { changeStatus(e, instance)});
+        checkBox.addEventListener('change', (e) => { 
+            changeStatus(e, instance)
+            e.stopPropagation();
+        });
     });
 }
 
@@ -111,17 +126,18 @@ function changeStatus(e, instance) {
 
 
 
-function showTaskUI(instance, title) {
+function showTaskUI(instance, title) {    
+
     const mainTitle = document.querySelector('.main-title');
     mainTitle.textContent = title;
 
     const items = instance.getItems();
-    console.log(items);
+    console.log(title, items);
 
     const tasks = document.querySelector('.tasks');
-    let i = items.length === 0 ? 0 : items.length - 1;
+    tasks.innerHTML = '';
 
-    for (; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
     
         const taskDiv = document.createElement('div');
         taskDiv.classList.add('task');
@@ -200,6 +216,9 @@ function showTaskUI(instance, title) {
     
         tasks.appendChild(taskDiv);        
     }
+
+    deleteTask(instance);
+    checkTask(instance);
 
 }
 

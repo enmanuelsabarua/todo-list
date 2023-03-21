@@ -1,7 +1,7 @@
 import Project from "./project";
 import Item from "./item";
 
-let selectedProjectId = -1;
+let selectedProjectId = 0;
 export default function HandleProjects() {
     const projects = [];
 
@@ -20,8 +20,11 @@ export default function HandleProjects() {
     }
 
     const getProjects = () => {
-        console.log(projects);
         return projects;
+    }
+
+    const getName = () => {
+        return projects[selectedProjectId].name;
     }
 
     const selectProject = (id) => {
@@ -35,7 +38,6 @@ export default function HandleProjects() {
     }
 
     const getItems = () => {
-        console.log(projects[selectedProjectId].getItems());
         return projects[selectedProjectId].getItems();
     }
 
@@ -57,6 +59,7 @@ export default function HandleProjects() {
         createProject, 
         deleteProject, 
         getProjects, 
+        getName,
         selectProject, 
         selectedProjectId,
         createItem,

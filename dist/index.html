@@ -16,11 +16,31 @@
             <a class="menu-link" href=""><i class="fa-solid fa-calendar-week"></i> Today</a>
             <a class="menu-link" href=""><i class="fa-regular fa-calendar-days"></i> This week</a>
             <div class="projects">
-                <h3>Projects <a href=""><i class="fa-solid fa-plus"></i></a></h3>
+                <h3>Projects <a href="" class="create-project"><i class="fa-solid fa-plus"></i></a></h3>
+                <div class="project-list">
+                    <!-- <div class="project">
+                        <h4>Project 1 <i class="fa-solid fa-xmark"></i></h4>
+                    </div> -->
+                </div>
+
+                <div class="form-div">
+                    <form class="projects-form">
+                        <h2>Add Project</h2>
+    
+                        <div class="form-control">
+                            <label for="project-name">Name</label>
+                            <input type="text" id="project-name" name="project-name">
+                        </div>
+                        <div class="buttons">
+                            <button type="button" class="cancel-project-btn">Cancel</button>
+                            <button type="submit" class="add-project-btn">Add</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </aside>
         <main>
-            <h2>Inbox</h2>
+            <h2 class="main-title">Inbox</h2>
             <div class="tasks"></div>
 
             <a href="" id="add-task"><i class="fa-solid fa-plus"></i> Add task</a>

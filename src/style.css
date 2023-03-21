@@ -15,6 +15,7 @@ body {
     height: 100%;
     display: grid;
     grid-template-rows: auto 1fr;
+    position: relative;
 }
 
 h1 {
@@ -61,14 +62,15 @@ aside a {
 
 .projects {
     margin-top: 1rem;
-}
-
-.projects:hover h3 {
-    background-color: #c7c7c7;
+    padding: .0 1rem;
 }
 
 .projects h3 {
-    padding: .8rem 1rem;
+    /* background-color: #c7c7c7; */
+}
+
+.projects h3 {
+    padding: .8rem .2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -82,6 +84,105 @@ aside a {
     opacity: 0;
     transition: .2s;
     color: rgba(0,0,0,0.56);
+}
+
+.project {
+    padding: .5rem 1rem .5rem .5rem;
+    border-radius: 10px;
+    transition: .2s;
+}
+
+.project h4 {
+    color: rgba(0,0,0,0.56);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 400;
+}
+
+.project h4 i {
+    color: rgba(0, 0, 0, 0.308);
+    opacity: 0;
+    transition: .2s;
+}
+
+.project:hover {
+    cursor: pointer;
+    background-color: #c7c7c7;
+}
+
+.project:hover i {
+    opacity: 1;
+}
+
+.project i:hover {
+    color: rgba(0, 0, 0, 0.671);
+    
+}
+
+.form-div {
+    position: absolute;
+    top: -150%;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #00000050;
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.form-div.pop-up {
+    top: 0;
+    opacity: 1;
+}
+
+.projects-form {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: white;
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.projects-form {
+    width: 300px;
+}
+
+.projects-form h2 {
+    margin-bottom: 1rem;
+}
+
+.projects-form label {
+    display: block;
+    margin-bottom: .5rem;
+}
+
+.projects-form input {
+    padding: .3rem .5rem;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px #8888884f solid;
+    transition: .2s;
+}
+
+.projects-form input:focus {
+    outline: transparent;
+    border: 1px #888888 solid;
+}
+
+.projects-form .add-project-btn {
+    background-color: #d1453b;
+    color: white;
+}
+
+.projects-form .add-project-btn.disabled {
+    background-color: #df847e;
+}
+
+.projects-form .add-project-btn:disabled {
+    cursor: not-allowed;
 }
 
 aside:hover .projects a {
@@ -133,6 +234,42 @@ main a:hover {
     display: block;
     width: 100%;
 }
+
+.check {
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+}
+
+.check::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+    background-color: CanvasText;
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.check:checked::before {
+    transform: scale(1);
+}
+
+.check:focus {
+    outline: max(2px, 0.15em) solid currentColor;
+    outline-offset: max(2px, 0.15em);
+  }
 
 .form input[type="date"], select {
     border-radius: 5px;

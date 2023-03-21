@@ -1,59 +1,31 @@
-import HandleInbox from './modules/HandleInbox';
+// import HandleInbox from './modules/HandleInbox';
 import HandleProjects from './modules/HandleProjects';
+import { inbox, HandleTaskUI, showTaskUI } from './modules/ui/InboxUI';
 
 import './style.css';
 
+const project = HandleProjects();
 
-//  inbox.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4);
-//  inbox.createItem(2, "Barrer", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-//  inbox.getItems();
-//  inbox.changeCheckStatus(1);
+function HandleProjectUI() {
+    const createProjectBtn = document.querySelector('.create-project');
+    const projectForm = document.querySelector('.form-div');
 
-// const projects = HandleProjects();
-// projects.createProject("Programming");
-// projects.createProject("Goals");
-// projects.selectProject(0);
-// projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-// projects.selectProject(1);
-// projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-// projects.createItem("Tarea", "Hacer la tarea", "04/01/2023", 4, "notas", false);
-// projects.getProjects();
-const inbox = HandleInbox();
-
-function addTaskUIInbox() {
-    // createItem, getItems, deleteItem, changeCheckStatus
-
-    const addTaskButton = document.querySelector('#add-task');
-    const form = document.querySelector('.form');
-
-    // Show form
-    addTaskButton.addEventListener('click', e => {
+    createProjectBtn.addEventListener('click', e => {
         e.preventDefault();
 
-        form.classList.remove('hide');
-        addTaskButton.classList.add('hide');
+        projectForm.classList.add('pop-up');
+        
     });
-    
+
     // Form buttons
-    const cancelBtn = document.querySelector('.cancel-btn');
-    const addBtn = document.querySelector('.add-btn');
+    const cancelBtn = document.querySelector('.cancel-project-btn');
+    const addBtn = document.querySelector('.add-project-btn');
 
     cancelBtn.addEventListener('click', e => {
-        e.preventDefault();
-        
-        form.classList.add('hide');
-        addTaskButton.classList.remove('hide');
-
-        name.value = '';
-        description.value = '';
-        dueDate.value = '';
-        priority.value = '0';
-
-        addBtn.disabled = true;
-        addBtn.classList.add('disabled'); 
+        projectForm.classList.remove('pop-up');
     });
 
-    const name = document.querySelector('#task-name');
+    const name = document.querySelector('#project-name');
 
     addBtn.disabled = true;
     addBtn.classList.add('disabled');    
@@ -70,162 +42,67 @@ function addTaskUIInbox() {
     });
 
     addBtn.addEventListener('click', e => {
-        e.preventDefault();        
+        e.preventDefault();
 
-        const description = document.querySelector('#description');
+        project.createProject(name.value);
+        showProjectUI();
+        deleteProject();
 
-        const dueDate = document.querySelector('#due-date');
-        const priority = document.querySelector('#priority');
-        
-        inbox.createItem(name.value, description.value, dueDate.value, priority.value, false);
-        showTaskUIInbox();
-        deleteTaskInbox();
-        checkTask();
-
-        form.classList.add('hide');
-        addTaskButton.classList.remove('hide');
-
+        projectForm.classList.remove('pop-up');
         name.value = '';
-        description.value = '';
-        dueDate.value = '';
-        priority.value = '0';
-
-        addBtn.disabled = true;
-        addBtn.classList.add('disabled');    
-
     });
+
 }
 
+function deleteProject() {
+    const deleteBtns = document.querySelectorAll('.delete-project');
 
-function deleteTaskInbox() {
-    const deleteBtns = document.querySelectorAll('.delete');
-
-    
     deleteBtns.forEach(btn => {
-        btn.addEventListener('click', eraseTask);
-    });
+        btn.addEventListener('click', e => {
+            const projectDiv = e.target.parentNode.parentNode;
+            const id = +projectDiv.dataset.id;
 
+            console.log(projectDiv);
+
+            project.deleteProject(id);
+            projectDiv.remove();
+        });
+    })
 }
 
-function eraseTask(e) {
-    const task = e.target.parentNode.parentNode.parentNode;
-    const id = +task.dataset.id;
+function showProjectUI() {
+    // <div class="project">
+    //     <h4>Project 1 <i class="fa-solid fa-xmark"></i></h4>
+    // </div>
 
-    console.log(task);
+    const projects = project.getProjects();
 
-    inbox.deleteItem(id);
-    task.remove();
-}
+    const projectsDiv = document.querySelector('.project-list');
+    let i = projects.length === 0 ? 0 : projects.length - 1;
 
-function checkTask() {
-    const checkBoxes = document.querySelectorAll('.check');
-
-    checkBoxes.forEach(checkBox => {
-        checkBox.addEventListener('change', changeStatus);
-    });
-}
-
-function changeStatus(e) {
-    setTimeout(() => {
-        const task = e.target.parentNode.parentNode;
-        const id = +task.dataset.id;
-
-        inbox.deleteItem(id);
-        task.remove();
-        inbox.changeCheckStatus(id);
-    }, 500)
-}
-
-
-
-function showTaskUIInbox() {
-    const items = inbox.getItems();
-    console.log(items);
-
-    const tasks = document.querySelector('.tasks');
-    let i = items.length === 0 ? 0 : items.length - 1;
-
-    for (; i < items.length; i++) {
+    for (; i < projects.length; i++) {
+        const projectDiv = document.createElement('div');
+        projectDiv.classList.add('project');        
+        projectDiv.dataset.id = projects[i].id;
     
-        const taskDiv = document.createElement('div');
-        taskDiv.classList.add('task');
-        taskDiv.dataset.id = items[i].id;
+        const projectTitle = document.createElement('h4');
     
-        const inputDiv = document.createElement('div');
+        projectTitle.textContent = projects[i].name;
     
-        const check = document.createElement('input');
-        check.type = 'checkbox';
-        check.name = 'check';
-        check.classList.add('check');
-    
-        inputDiv.appendChild(check);
-
-    
-        const taskInfo = document.createElement('div');
-        taskInfo.classList.add('task-info');
-    
-        const title = document.createElement('p');
-        title.classList.add('task-title');
-        title.textContent = items[i].title;
+        const deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('fa-solid');
+        deleteIcon.classList.add('fa-xmark');
+        deleteIcon.classList.add('delete-project');       
         
-        const description = document.createElement('p');
-        description.classList.add('task-description');
-        description.textContent = items[i].description;
-        
-        const date = document.createElement('p');
-        date.classList.add('date');
-        date.textContent = items[i].dueDate;
-        
-        const priority = document.createElement('p');
-        priority.classList.add('priority');
-        if (items[i].priority !== '0') {
-            priority.textContent = `Priority ${items[i].priority}`;
-        }
-
-        switch (items[i].priority) {
-            case '1':
-                priority.classList.add('task-priority1');
-                break;
-            case '2':
-                priority.classList.add('task-priority2');
-                break;
-            case '3':
-                priority.classList.add('task-priority3');
-                break;
-            case '4':
-                priority.classList.add('task-priority4');
-                break;
-        
-            default:
-                break;
-        }
-    
-        taskInfo.appendChild(title);
-        taskInfo.appendChild(description);
-        taskInfo.appendChild(date);
-        taskInfo.appendChild(priority);
-
-
-        const closeDiv = document.createElement('div');
-        closeDiv.classList.add('close');
-
-        const pIcon = document.createElement('p');
-        const icon = document.createElement('i');
-        icon.classList.add('fa-solid');
-        icon.classList.add('fa-xmark');
-        pIcon.classList.add('delete');
-        pIcon.appendChild(icon);
-
-        closeDiv.appendChild(pIcon);
-    
-        taskDiv.appendChild(inputDiv);
-        taskDiv.appendChild(taskInfo);
-        taskDiv.appendChild(closeDiv);
-    
-        tasks.appendChild(taskDiv);        
+        projectTitle.appendChild(deleteIcon);
+        projectDiv.appendChild(projectTitle);
+        projectsDiv.appendChild(projectDiv);
     }
-
+    
+    
 }
 
-addTaskUIInbox();
-showTaskUIInbox();
+HandleProjectUI();
+
+HandleTaskUI(inbox);
+showTaskUI(inbox, 'Inbox');

@@ -1,9 +1,9 @@
 import Project from "./project";
 import Item from "./item";
 
+let selectedProjectId = -1;
 export default function HandleProjects() {
     const projects = [];
-    let selectedProjectId = 0;
 
     const createProject = (name) => {
         const project = new Project(name)
@@ -58,9 +58,12 @@ export default function HandleProjects() {
         deleteProject, 
         getProjects, 
         selectProject, 
+        selectedProjectId,
         createItem,
         getItems,
         deleteItem,
         changeCheckStatus,
     }
 }
+
+export { selectedProjectId };

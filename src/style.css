@@ -111,6 +111,10 @@ aside a {
     background-color: #c7c7c7;
 }
 
+.selected-project {
+    background-color: #c7c7c7;
+}
+
 .project:hover i {
     opacity: 1;
 }

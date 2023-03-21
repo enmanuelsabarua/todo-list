@@ -1,5 +1,5 @@
 // import HandleInbox from './modules/HandleInbox';
-import HandleProjects from './modules/HandleProjects';
+import HandleProjects, { selectedProjectId }from './modules/HandleProjects';
 import { inbox, HandleTaskUI, showTaskUI } from './modules/ui/InboxUI';
 
 import './style.css';
@@ -44,9 +44,34 @@ function HandleProjectUI() {
     addBtn.addEventListener('click', e => {
         e.preventDefault();
 
-        project.createProject(name.value);
+        project.createProject(name.value);      
+
+        const lastProject = project.getProjects().slice(-1);
+        project.selectProject(lastProject[0].id);
+        
         showProjectUI();
+        HandleChangeProject();
         deleteProject();
+        showTaskUI(lastProject[0], lastProject[0].name);
+        
+
+        // Remove the selected-project class from the other projects
+        if (selectedProjectId !== 0) {
+            const lastProjectElement = document.querySelector(`[data-id="${project.getProjects().slice(-2)[0].id}"]`);
+            lastProjectElement.classList.remove('selected-project');
+        } 
+
+        const projectsDOM = document.querySelectorAll('.project');                
+        projectsDOM.forEach(p => p.classList.remove('selected-project'));
+        
+
+        const lastProjectElement = document.querySelector(`[data-id="${selectedProjectId}"]`);
+        lastProjectElement.classList.add('selected-project');
+        
+
+
+        addBtn.disabled = true;
+        addBtn.classList.add('disabled');  
 
         projectForm.classList.remove('pop-up');
         name.value = '';
@@ -62,10 +87,14 @@ function deleteProject() {
             const projectDiv = e.target.parentNode.parentNode;
             const id = +projectDiv.dataset.id;
 
-            console.log(projectDiv);
+            showTaskUI(inbox, 'Inbox');
+            project.selectProject(0);
+            console.log("Selected id", selectedProjectId);
 
             project.deleteProject(id);
             projectDiv.remove();
+
+            e.stopPropagation();
         });
     })
 }
@@ -100,6 +129,35 @@ function showProjectUI() {
     }
     
     
+}
+
+function HandleChangeProject() {
+    const projectsDOM = document.querySelectorAll('.project');
+
+    projectsDOM.forEach(projectTab => {
+        
+        projectTab.addEventListener('click', e => {
+            
+            projectsDOM.forEach(p => p.classList.remove('selected-project'));
+            
+            projectTab.classList.add('selected-project');
+            const id = +projectTab.dataset.id;
+            project.selectProject(id);
+            console.log(selectedProjectId);
+
+            const projectsArr = project.getProjects();
+            
+            for (let i = 0; i < projectsArr.length; i++) {
+                if (projectsArr[i].id === selectedProjectId) {
+                    showTaskUI(projectsArr[i], projectsArr[i].name);
+                }
+            }
+        });
+        
+    });
+}
+
+function changeTab(project, name) {
 }
 
 HandleProjectUI();

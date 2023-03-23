@@ -1,9 +1,5 @@
 
 function HandleTaskUI(instance) {
-    // createItem, getItems, deleteItem, changeCheckStatus
-
-    // FIX CHANGE TAB from projects to inbox
-    
 
     const addTaskButton = document.querySelector('#add-task');
     const form = document.querySelector('.form');
@@ -221,9 +217,6 @@ function showTaskUI(instance, title) {
     checkTask(instance);
 
 }
-
-// HandleTaskUI(inbox);
-// showTaskUI(inbox);
 
 export {
     HandleTaskUI,

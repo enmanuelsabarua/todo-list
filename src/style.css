@@ -46,7 +46,7 @@ aside a {
     color: black;
 }
 
-.menu-link {
+a.menu-link {
     padding: .8rem .8rem;
     border-radius: 10px;
     transition: .1s;

@@ -1,4 +1,3 @@
-// import HandleInbox from './modules/HandleInbox';
 import HandleProjects, { selectedProjectId }from './modules/HandleProjects';
 import { inbox, HandleTaskUI, showTaskUI } from './modules/ui/InboxUI';
 
@@ -7,6 +6,10 @@ import './style.css';
 const project = HandleProjects();
 
 function HandleProjectUI() {
+    project.createProject('Inbox');
+    document.querySelector('#inbox').dataset.id = 0;
+
+
     const createProjectBtn = document.querySelector('.create-project');
     const projectForm = document.querySelector('.form-div');
 
@@ -143,6 +146,7 @@ function HandleChangeProject() {
     projectsDOM.forEach(projectTab => {
         
         projectTab.addEventListener('click', e => {
+            e.preventDefault();
             
             projectsDOM.forEach(p => p.classList.remove('selected-project'));
             
@@ -155,7 +159,6 @@ function HandleChangeProject() {
             for (let i = 0; i < projectsArr.length; i++) {
                 if (projectsArr[i].id === selectedProjectId) {
                     showTaskUI(project, projectsArr[i].name);
-                    // HandleTaskUI(project, projectsArr[i].name);
                 }
             }
 
@@ -167,14 +170,3 @@ function HandleChangeProject() {
 
 HandleProjectUI();
 HandleTaskUI(project);
-
-// HandleTaskUI(inbox, 'Inbox');
-// showTaskUI(inbox, 'Inbox');
-
-// const inboxBtn = document.querySelector('#inbox');
-// inboxBtn.addEventListener('click', e => {
-//     e.preventDefault();
-
-//     HandleTaskUI(inbox, 'Inbox');
-//     showTaskUI(inbox, 'Inbox');
-// });

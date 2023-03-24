@@ -1,8 +1,12 @@
 export default class Project {
-    static id = 0;
-    
+  
     constructor(name) {
-        this.id = Project.id;
+        if (!localStorage.getItem('id')) {
+            this.id = 0;
+            localStorage.setItem('id', 0);
+        } else {
+            this.id = localStorage.getItem('id');
+        }
         this.name = name;
         this.items = [];
     }

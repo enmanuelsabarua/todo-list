@@ -2,5 +2,6 @@ import { project, HandleProjectUI, HandleTaskUI } from './modules/ui/HandleProje
 
 import './style.css';
 
+
 HandleProjectUI();
 HandleTaskUI(project);

@@ -1,17 +1,20 @@
+import format from 'date-fns/format';
 
 function HandleTaskUI(instance) {
 
     const addTaskButton = document.querySelector('#add-task');
     const form = document.querySelector('.form');
-
+    const dueDate = document.querySelector('#due-date');
+    
+    
     // Show form
     addTaskButton.addEventListener('click', e => {
         e.preventDefault();
-
+        
         form.classList.remove('hide');
         addTaskButton.classList.add('hide');
-
-        e.stopPropagation();
+        dueDate.min = new Date().toISOString().split("T")[0];
+        
     });
     
     // Form buttons
@@ -29,7 +32,6 @@ function HandleTaskUI(instance) {
         addBtn.disabled = true;
         addBtn.classList.add('disabled'); 
 
-        e.stopPropagation();
     });
 
     const name = document.querySelector('#task-name');
@@ -73,7 +75,6 @@ function HandleTaskUI(instance) {
         addBtn.disabled = true;
         addBtn.classList.add('disabled');    
 
-        e.stopPropagation();
     });
 }
 
@@ -84,7 +85,6 @@ function deleteTask(instance) {
     deleteBtns.forEach(btn => {
         btn.addEventListener('click', (e) => { 
             eraseTask(e, instance); 
-            e.stopPropagation();
         });
     });
 
@@ -104,7 +104,6 @@ function checkTask(instance) {
     checkBoxes.forEach(checkBox => {
         checkBox.addEventListener('change', (e) => { 
             changeStatus(e, instance)
-            e.stopPropagation();
         });
     });
 }
@@ -129,6 +128,12 @@ function showTaskUI(instance, title) {
 
     const items = instance.getItems();
     console.log(title, items);
+
+    // <a href="" id="add-task"><i class="fa-solid fa-plus"></i> Add task</a>
+    // const addTaskBtn = document.querySelector('#add-task');
+    // if(!addTaskBtn) {
+    //     addTaskBtn.classList.remove('hide');
+    // }
 
     const tasks = document.querySelector('.tasks');
     tasks.innerHTML = '';
@@ -162,7 +167,12 @@ function showTaskUI(instance, title) {
         
         const date = document.createElement('p');
         date.classList.add('date');
-        date.textContent = items[i].dueDate;
+        let result = items[i].dueDate;
+
+        if(items[i].dueDate) {
+            result = format(new Date(items[i].dueDate), 'MM/dd/yyyy')
+        }
+        date.textContent = result;
         
         const priority = document.createElement('p');
         priority.classList.add('priority');

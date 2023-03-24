@@ -1,6 +1,7 @@
 import Project from "./project";
 import Item from "./item";
 
+// Verify if the site was load for the first time
 if(!JSON.parse(localStorage.getItem('selectedProjectId'))) {
     let selectedProjectId = 0;
     localStorage.setItem('selectedProjectId', JSON.stringify(selectedProjectId));

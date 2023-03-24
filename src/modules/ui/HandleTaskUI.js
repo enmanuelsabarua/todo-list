@@ -1,5 +1,6 @@
 import format from 'date-fns/format';
 
+// Handle the given project's task
 function HandleTaskUI(instance) {
 
     const addTaskButton = document.querySelector('#add-task');
@@ -20,8 +21,6 @@ function HandleTaskUI(instance) {
     // Form buttons
     const cancelBtn = document.querySelector('.cancel-btn');
     const addBtn = document.querySelector('.add-btn');
-
-    // addBtn.replaceWith(addBtn.cloneNode(true));   
 
     cancelBtn.addEventListener('click', e => {
         e.preventDefault();
@@ -127,13 +126,6 @@ function showTaskUI(instance, title) {
     mainTitle.textContent = title;
 
     const items = instance.getItems();
-    console.log(title, items);
-
-    // <a href="" id="add-task"><i class="fa-solid fa-plus"></i> Add task</a>
-    // const addTaskBtn = document.querySelector('#add-task');
-    // if(!addTaskBtn) {
-    //     addTaskBtn.classList.remove('hide');
-    // }
 
     const tasks = document.querySelector('.tasks');
     tasks.innerHTML = '';
